@@ -15,6 +15,7 @@ The Beauty here is the flexibility it offers. You can easily add your own implem
 
 ### TODO List
 - [x] Create README
+- [ ] Finish/Fix the ST7735 Implementation
 - [ ] Develop a usage guide
 - [ ] Review Doxygen comments for clarity
 - [ ] Upload diagrams to explain the architecture
