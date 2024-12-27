@@ -35,22 +35,22 @@ void ST7735::reset()
 	controller.releaseReset();
 }
 
-void ST7735::setWindow(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1)
+void ST7735::setWindow(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1)
 {
-	if(!checkBounds(x0, y1, y0, y1))
+	if(!checkBounds(x0, x1, y0, y1))
 	{
 		return;
 	}
 
 	sendCommand(CASET);
 	sendData16(0x0000 | x0);
-	sendData16(0x0000 | x1);
+	sendData16(0x0000 | x1-1);
 	sendCommand(RASET);
 	sendData16(0x0000 | y0);
-	sendData16(0x0000 | y1);
+	sendData16(0x0000 | y1-1);
 }
 
-void ST7735::drawPixel(uint8_t x, uint8_t y, uint16_t color)
+void ST7735::drawPixel(uint16_t x, uint16_t y, uint16_t color)
 {
 	setWindow(x, x, y, y);
 	sendColor565(color, 1);
@@ -66,7 +66,7 @@ void ST7735::drawString(char *str, uint16_t color, ST7735_FontSizes size)
 
 }
 
-void ST7735::drawLine(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1, uint16_t color)
+void ST7735::drawLine(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color)
 {
 	setWindow(x0, x1, y0, y1);
 
@@ -78,28 +78,28 @@ void ST7735::drawLine(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1, uint16_t c
 
 	if(y_per_x)
 	{
-		for(uint8_t x = 0; x < length; x++)
+		for(uint16_t x = 0; x < length; x++)
 		{
 			drawPixel(x, (x * y_per_x), color);
 		}
 	}
 	else if(x_per_y)
 	{
-		for(uint8_t y = 0; y < length; y++)
+		for(uint16_t y = 0; y < length; y++)
 		{
 			drawPixel(y, (y * x_per_y), color);
 		}	
 	}
 }
 
-void ST7735::drawRect(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1, uint16_t color)
+void ST7735::drawRect(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color)
 {
 	setWindow(x0, x1, y0, y1);
 	uint16_t num_pixels = (x1 - x0) * (y1 - y0);
 	sendColor565(color, num_pixels);
 }
 
-void ST7735::setPosition(uint8_t x, uint8_t y)
+void ST7735::setPosition(uint16_t x, uint16_t y)
 {
 
 }
@@ -107,7 +107,7 @@ void ST7735::setPosition(uint8_t x, uint8_t y)
 void ST7735::clear()
 {
 	setWindow(0, SIZE_X, 0, SIZE_Y);
-	sendColor565(BLACK, CACHE_SIZE_MEM);
+	sendColor565(WHITE, CACHE_SIZE_MEM);
 }
 
 /* Private */
@@ -149,7 +149,7 @@ void ST7735::dispOff()
 	sendCommand(DISPOFF);
 }
 
-bool ST7735::checkBounds(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1)
+bool ST7735::checkBounds(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1)
 {
 	if ((x0 > x1) || (x1 > SIZE_X) || (y0 > y1) || (y1 > SIZE_Y)) 
 	{

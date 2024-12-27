@@ -107,13 +107,13 @@ public:
 	ST7735(DisplayController &controller): controller(controller) {}
 	void init();
 	void reset();
-	void setWindow(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1);
-	void drawPixel(uint8_t x, uint8_t y, uint16_t color);
+	void setWindow(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1);
+	void drawPixel(uint16_t x, uint16_t y, uint16_t color);
 	void drawChar(char c, uint16_t color, ST7735_FontSizes size);
 	void drawString(char *str, uint16_t color, ST7735_FontSizes size);
-	void drawLine(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1, uint16_t color);
-	void drawRect(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1, uint16_t color);
-	void setPosition(uint8_t x, uint8_t y);
+	void drawLine(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color);
+	void drawRect(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color);
+	void setPosition(uint16_t x, uint16_t y);
 	void clear();
 
 
@@ -124,7 +124,7 @@ private:
 	void sendColor565(uint16_t color, uint16_t count);
 	void dispOn();
 	void dispOff();
-	bool checkBounds(uint8_t x0, uint8_t x1, uint8_t y0, uint8_t y1);
+	bool checkBounds(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1);
 
 	DisplayController &controller;
 };
