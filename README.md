@@ -15,11 +15,11 @@ The Beauty here is the flexibility it offers. You can easily add your own implem
 
 ### TODO List
 - [x] Create README
-- [ ] Remove SPI Interface and only use Databus Interface instead
+- [x] Remove SPI Interface and only use Databus Interface instead
 - [ ] Finish/Fix the ST7735 Implementation
 - [ ] Develop a usage guide
-- [ ] Review Doxygen comments for clarity
-- [ ] Upload diagrams to explain the architecture
-- [ ] Add more display implementations
+- [ ] Review Doxygen comments for consistency
+- [ ] Upload diagrams to give a better overview
+- [ ] Add more display implementations potentially
 
 **THIS REPO IS IN A VERY EARLY STAGE, INTERFACES MIGHT CHANGE OR IMPLEMENTATIONS MIGHT BE BUGGY**

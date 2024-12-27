@@ -1,6 +1,7 @@
 #include "atmega328p_displaycontroller.h"
 
-ATMega328pDisplayController::ATMega328pDisplayController(DataBus &data_bus, volatile uint8_t *reset_ddr, volatile uint8_t *reset_port, uint8_t reset_pin_num, 
+ATMega328pDisplayController::ATMega328pDisplayController(DataBus &data_bus, 
+volatile uint8_t *reset_ddr, volatile uint8_t *reset_port, uint8_t reset_pin_num, 
 volatile uint8_t *dc_ddr, volatile uint8_t *dc_port, uint8_t dc_pin_num): 
 /* Call Parent Class Constructor */
 DisplayController(data_bus),

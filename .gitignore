@@ -1,5 +1,5 @@
-spi.c
-spi.h
-system_time.c
-system_time.h
+atmega328p_impl/spi.c
+atmega328p_impl/spi.h
+atmega328p_impl/system_time.c
+atmega328p_impl/system_time.h
 *.o
