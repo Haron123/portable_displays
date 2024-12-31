@@ -16,6 +16,7 @@ The Beauty here is the flexibility it offers. You can easily add your own implem
 ### TODO List
 - [x] Create README
 - [x] Remove SPI Interface and only use Databus Interface instead
+- [ ] Add Doxygen Comments to the Functions missing it
 - [ ] Finish/Fix the ST7735 Implementation
 - [ ] Develop a usage guide
 - [ ] Review Doxygen comments for consistency
