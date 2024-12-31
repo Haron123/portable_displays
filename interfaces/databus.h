@@ -32,7 +32,7 @@ public:
 	 * @param data the array of bytes to send
 	 * @param len the length of the data
 	 */
-	void sendData(uint8_t *data, uint16_t len)
+	inline void sendData(uint8_t *data, uint16_t len)
 	{
 		for(uint16_t i = 0; i < len; i++)
 		{
@@ -45,7 +45,7 @@ public:
 	 * 
 	 * @param data the byte to send
 	 */
-	void sendData8(uint8_t data)
+	inline void sendData8(uint8_t data)
 	{
 		writeData(data);
 	}
@@ -55,7 +55,7 @@ public:
 	 * 
 	 * @param data the 2 bytes to send
 	 */
-	void sendData16(uint16_t data)
+	inline void sendData16(uint16_t data)
 	{
 		writeData((data >> 8) & 0xFF);
 		writeData(data & 0xFF);
@@ -67,7 +67,7 @@ public:
 	 * @param data the array in which will be written
 	 * @param len the amount of bytes to read
 	 */
-	void receiveData(uint8_t *data, uint16_t len)
+	inline void receiveData(uint8_t *data, uint16_t len)
 	{
 		for(uint16_t i = 0; i < len; i++)
 		{
@@ -80,7 +80,7 @@ public:
 	 * 
 	 * @retval the byte thats been read from the databus
 	 */
-	uint8_t receiveData8()
+	inline uint8_t receiveData8()
 	{
 		return readData();
 	}
@@ -90,7 +90,7 @@ public:
 	 * 
 	 * @retval the 2 bytes that have been read from the databus
 	 */
-	uint16_t receiveData16()
+	inline uint16_t receiveData16()
 	{
 		uint16_t result = 0;
 

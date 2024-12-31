@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "display_controller.h"
+#include "portable_display.h"
 
 /*
 Definitions taken from
@@ -63,12 +64,6 @@ So Big Thanks to Marian Hrinko
 
 #define PWCTR6                0xFC
 
-// Colors
-// -----------------------------------
-#define BLACK                 0x0000
-#define WHITE                 0xFFFF
-#define RED                   0xF000
-
 // AREA definition
 // -----------------------------------
 #define MAX_X                 161               // max columns / MV = 0 in MADCTL
@@ -89,41 +84,38 @@ const uint8_t INIT_ST7735B[] =
   0, 200, DISPON 
 };
 
-enum ST7735_FontSizes 
+const uint8_t fontsize_values[] =
 {
-	// 1x high & 1x wide size
-	X1 = 0x00,
-	// 2x high & 1x wide size
-	X2 = 0x80,
-	// 2x high & 2x wider size
-	// 0x0A is set because need to offset 5 position to right
-	//      when draw the characters of string 
-	X3 = 0x81
+	0x00, /* X1 */
+	0x80, /* X2 */
+	0x81, /* X3 */
 };
+#define MAX_FONTSIZE sizeof(fontsize_values)
 
-class ST7735
+class ST7735: public PortableDisplay
 {
 public:
 	ST7735(DisplayController &controller): controller(controller) {}
-	void init();
-	void reset();
-	void setWindow(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1);
-	void drawPixel(uint16_t x, uint16_t y, uint16_t color);
-	void drawChar(char c, uint16_t color, ST7735_FontSizes size);
-	void drawString(char *str, uint16_t color, ST7735_FontSizes size);
-	void drawLine(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color);
-	void drawRect(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color);
-	void setPosition(uint16_t x, uint16_t y);
-	void clear();
-
+	void init() override;
+	void reset() override;
+	void drawPixel(uint16_t x, uint16_t y, uint16_t color = BLACK) override;
+	void drawLine(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color = BLACK) override;
+	void drawRect(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color = BLACK) override;
+	void drawImg(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint8_t *img) override;
+	void setPosition(uint16_t x, uint16_t y) override;
+	void drawChar(char c, uint8_t size, uint16_t color = BLACK) override;
+	void drawString(char *str, uint8_t size, uint16_t color = BLACK) override;
+	void clear() override;
+	void on() override;
+	void off() override;
 
 private:
+	void setWindow(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1);
 	void sendCommand(uint8_t cmd);
 	void sendData8(uint8_t data);
 	void sendData16(uint16_t data);
+	void sendData16Burst(uint16_t data, uint16_t count);
 	void sendColor565(uint16_t color, uint16_t count);
-	void dispOn();
-	void dispOff();
 	bool checkBounds(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1);
 
 	DisplayController &controller;

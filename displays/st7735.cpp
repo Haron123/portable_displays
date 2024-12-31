@@ -56,16 +56,6 @@ void ST7735::drawPixel(uint16_t x, uint16_t y, uint16_t color)
 	sendColor565(color, 1);
 }
 
-void ST7735::drawChar(char c, uint16_t color, ST7735_FontSizes size)
-{
-
-}
-
-void ST7735::drawString(char *str, uint16_t color, ST7735_FontSizes size)
-{
-
-}
-
 void ST7735::drawLine(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color)
 {
 	setWindow(x0, x1, y0, y1);
@@ -94,14 +84,61 @@ void ST7735::drawLine(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16
 
 void ST7735::drawRect(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint16_t color)
 {
+	/* Highly optimized so its ugly*/
 	setWindow(x0, x1, y0, y1);
-	uint16_t num_pixels = (x1 - x0) * (y1 - y0);
-	sendColor565(color, num_pixels);
+
+	uint8_t w = (x1 - x0);
+	uint8_t l = (y1 - y0);
+
+	sendCommand(RAMWR);
+	controller.releaseDC();
+	
+	uint8_t n = (w + 7) >> 3;
+	uint8_t i = w & 7;
+	do
+	{
+		switch (i) {
+			case 0: do {    controller.data_bus.sendData16(color);
+			case 7:         controller.data_bus.sendData16(color);
+			case 6:         controller.data_bus.sendData16(color);
+			case 5:         controller.data_bus.sendData16(color);
+			case 4:         controller.data_bus.sendData16(color);
+			case 3:         controller.data_bus.sendData16(color);
+			case 2:         controller.data_bus.sendData16(color);
+			case 1:         controller.data_bus.sendData16(color);
+			} while(--n);
+		}
+	} while(--l);
+}
+
+void ST7735::drawImg(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1, uint8_t *img)
+{
+	drawRect(x0, x1, y0, y1);
 }
 
 void ST7735::setPosition(uint16_t x, uint16_t y)
 {
 
+}
+
+void ST7735::drawChar(char c, uint8_t size, uint16_t color)
+{
+
+}
+
+void ST7735::drawString(char *str, uint8_t size, uint16_t color)
+{
+
+}
+
+void ST7735::on()
+{
+	sendCommand(DISPON);
+}
+
+void ST7735::off()
+{
+	sendCommand(DISPOFF);
 }
 
 void ST7735::clear()
@@ -123,10 +160,20 @@ void ST7735::sendData8(uint8_t data)
 	controller.data_bus.sendData8(data);
 }
 
-void ST7735::sendData16(uint16_t data)
+inline void ST7735::sendData16(uint16_t data)
 {
 	controller.releaseDC();
 	controller.data_bus.sendData16(data);
+}
+
+inline void ST7735::sendData16Burst(uint16_t data, uint16_t count)
+{
+	controller.releaseDC();
+
+	for(uint16_t i = 0; i < count; i++)
+	{
+		controller.data_bus.sendData16(data);
+	}
 }
 
 void ST7735::sendColor565(uint16_t color, uint16_t count)
@@ -137,16 +184,6 @@ void ST7735::sendColor565(uint16_t color, uint16_t count)
 	{
 		sendData16(color);
 	}
-}
-
-void ST7735::dispOn()
-{
-	sendCommand(DISPON);
-}
-
-void ST7735::dispOff()
-{
-	sendCommand(DISPOFF);
 }
 
 bool ST7735::checkBounds(uint16_t x0, uint16_t x1, uint16_t y0, uint16_t y1)
